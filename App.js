@@ -1,6 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
 import React from 'react';
-import { SafeAreaView, StyleSheet} from 'react-native';
+import { SafeAreaView, View} from 'react-native';
 import List from './components/List';
 import GlobalStyles from './GlobalStyles';
 
@@ -8,8 +8,9 @@ import GlobalStyles from './GlobalStyles';
 const App = () => {
   return (
     <SafeAreaView style={GlobalStyles.droidSafeArea}>
-    <List />
-  <StatusBar style="auto" />
+      <List />
+
+  <StatusBar backgroundColor='#00BFFF' barStyle ='light-content' />
     </SafeAreaView>
   );
  }

@@ -2,6 +2,7 @@ import React from 'react'
 import { FlatList } from 'react-native';
 import ListItem from './ListItem';
 const mediaArray = [
+
   {
     'key': '0',
     'title': 'Title 1',
