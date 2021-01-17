@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, TouchableOpacity, Image, StyleSheet, SafeAreaView } from 'react-native';
 import PropTypes from 'prop-types';
 
-
+const uploadsUrl = 'http://media.mw.metropolia.fi/wbma/uploads/'
 const ListItem = (props) => {
   return (
 
@@ -11,7 +11,7 @@ const ListItem = (props) => {
     <TouchableOpacity style={styles.container}>
       <Image
         style={styles.imgView}
-        source={{uri: props.singleMedia.thumbnails.w160}}
+        source={{uri: uploadsUrl + props.singleMedia.thumbnails.w160}}
       />
 
       <View style={styles.childContainer}>
