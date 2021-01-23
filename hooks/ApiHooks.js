@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {baseUrl} from '../../variables';
+import {baseUrl} from '../variables';
 
 
 

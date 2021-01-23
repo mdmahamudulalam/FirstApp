@@ -2,6 +2,7 @@ import React from 'react'
 import { FlatList } from 'react-native';
 import {useLoadMedia} from '../hooks/ApiHooks';
 import ListItem from './ListItem';
+import PropTypes from 'prop-types';
 
 const List = (props) => {
   const mediaArray = useLoadMedia();
@@ -13,5 +14,9 @@ return (
      />
   );
 }
+
+List.propTypes = {
+  navigation: PropTypes.object,
+};
 
 export default List;
