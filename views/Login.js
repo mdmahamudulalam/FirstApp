@@ -3,38 +3,47 @@ import {
   StyleSheet,
   View,
   Text,
-  Button,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useLogin} from '../hooks/ApiHooks';
+import {LoginForm} from '../components/LoginForm';
+import RegisterForm from '../components/RegisterForm';
 
 const Login = ({navigation}) => {
-  const [isLoggedIn, setIsLoggedIn] = useContext(MainContext);
-  const logIn = async () => {
-    setIsLoggedIn(true);
-    await AsyncStorage.setItem('userToken', 'abc');
-    if (isLoggedIn){
-      navigation.navigate('Home');
-    }
+  const {isLoggedIn, setIsLoggedIn, setUser}   = useContext(MainContext);
 
-   };
-   const getToken = async () => {
+  const {checkToken } = useLogin();
+
+  const getToken = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
     console.log('token', userToken);
-    if (userToken === 'abc') {
-      setIsLoggedIn(true);
-      navigation.navigate('Home');
+    if (userToken) {
+      try{
+        const userData = await checkToken(userToken);
+        setIsLoggedIn(true);
+        setUser(userData);
+        navigation.navigate('Home');
+      } catch(error){
+        console.log('token check failed', error.message );
+      }
+
     }
   };
   useEffect(() => {
     getToken();
+    if (isLoggedIn){
+      navigation.navigate('Home');
+    }
   }, []);
 
   return (
     <View style={styles.container}>
       <Text>Login</Text>
-      <Button title="Sign in!" onPress={logIn}/>
+      <LoginForm navigation={navigation}/>
+      <Text>Register</Text>
+      <RegisterForm navigation={navigation} />
     </View>
   );
 };
