@@ -32,9 +32,9 @@ const Login = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Text>Login</Text>
+      <Text style={styles.frontText}>Login</Text>
       <LoginForm navigation={navigation} />
-      <Text>Register</Text>
+      <Text style={styles.frontText}>Register</Text>
       <RegisterForm navigation={navigation} />
     </View>
   );
@@ -43,10 +43,18 @@ const Login = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#7FFFD4',
     alignItems: 'center',
     justifyContent: 'center',
   },
+
+  frontText: {
+    fontSize: 20,
+    color:'red',
+    fontWeight: 'bold',
+    fontFamily: 'Roboto'
+
+  }
 });
 
 Login.propTypes = {

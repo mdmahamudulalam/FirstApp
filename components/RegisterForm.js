@@ -1,5 +1,5 @@
 import React from 'react';
-import {Alert, Button, View} from 'react-native';
+import {Alert, Button, StyleSheet, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {useLogin, useUser} from '../hooks/ApiHooks';
 import FormTextInput from './FormTextInput';
@@ -31,7 +31,7 @@ const RegisterForm = ({navigation}) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <FormTextInput
         autoCapitalize="none"
         placeholder="username"
@@ -57,6 +57,18 @@ const RegisterForm = ({navigation}) => {
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    margin: 2,
+    padding: 4,
+    fontWeight:'bold',
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    fontFamily: 'Roboto',
+    fontSize: 21,
+    width: '80%',
+    },
+});
 
 RegisterForm.propTypes = {
   navigation: PropTypes.object,

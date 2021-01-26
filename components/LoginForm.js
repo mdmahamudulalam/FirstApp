@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {View, Button} from 'react-native';
+import {View, Button, StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,7 +24,7 @@ const LoginForm = ({navigation}) => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <FormTextInput
         autoCapitalize="none"
         placeholder="username"
@@ -40,6 +40,21 @@ const LoginForm = ({navigation}) => {
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    margin: 2,
+    padding: 4,
+    backgroundColor: '#7FFFD4',
+    fontWeight:'bold',
+    backgroundColor: 'orange',
+    borderRadius: 10,
+    fontFamily: 'Roboto',
+    fontSize: 21,
+    width: '80%',
+    },
+});
+
+
 
 LoginForm.propTypes = {
   navigation: PropTypes.object,
