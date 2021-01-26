@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import {uploadsUrl} from '../variables';
+import {uploadsUrl} from '../utils/variables';
 
 
 const ListItem = ({navigation, singleMedia}) => {
@@ -29,12 +29,7 @@ const ListItem = ({navigation, singleMedia}) => {
   );
 }
 
-ListItem.propTypes = {
-  singleMedia: PropTypes.object,
-  navigation: PropTypes.object,
-};
 
-export default ListItem;
 
 const styles = StyleSheet.create({
   container: {
@@ -74,3 +69,10 @@ const styles = StyleSheet.create({
     fontSize: 17,
   }
 });
+
+ListItem.propTypes = {
+  singleMedia: PropTypes.object,
+  navigation: PropTypes.object,
+};
+
+export default ListItem;

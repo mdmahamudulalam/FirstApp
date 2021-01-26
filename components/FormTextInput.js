@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 const FormTextInput = ({style, ...otherProps}) => {
   return <TextInput style={[styles.textInput, style]} {...otherProps} />;
-
 };
 
 const styles = StyleSheet.create({
@@ -20,3 +19,4 @@ FormTextInput.propTypes = {
 };
 
 export default FormTextInput;
+

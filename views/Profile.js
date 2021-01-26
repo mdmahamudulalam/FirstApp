@@ -6,12 +6,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Profile = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, user} = useContext(MainContext);
-  console.log('profile  is loggedin', isLoggedIn);
-  console.log('profile  user data', user);
+  console.log('profile isLoggedIn?', isLoggedIn);
+  console.log('profile user data', user);
   const logout = async () => {
     setIsLoggedIn(false);
     await AsyncStorage.clear();
     if (!isLoggedIn) {
+     
       navigation.navigate('Login');
     }
   };
@@ -20,6 +21,7 @@ const Profile = ({navigation}) => {
       <Text>Profile</Text>
       <Text>Name: {user.username}</Text>
       <Text>Email: {user.email}</Text>
+      {/* <Text>id: {user.user_id}</Text> */}
       <Button title={'Logout'} onPress={logout} />
     </SafeAreaView>
   );
@@ -38,4 +40,5 @@ const styles = StyleSheet.create({
 Profile.propTypes = {
   navigation: PropTypes.object,
 };
+
 export default Profile;
