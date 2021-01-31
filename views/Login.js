@@ -1,15 +1,16 @@
-import React, {useContext, useEffect} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
+import {Button, Card, Text} from 'react-native-elements';
 
 const Login = ({navigation}) => {
   const {isLoggedIn, setIsLoggedIn, setUser} = useContext(MainContext);
-  console.log('isLoggedIn?', isLoggedIn);
+  const [formToggle, setFormToggle] = useState(true);
   const {checkToken} = useUser();
 
   const getToken = async () => {
@@ -31,31 +32,74 @@ const Login = ({navigation}) => {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.frontText}>Login</Text>
+    <ScrollView>
+    <KeyboardAvoidingView
+    style = {styles.container}
+    behavior={Platform.OS == 'ios' ? 'padding': 'height'}>
+
+    <View style = {styles.appTitle}>
+      <Text h3 style={{textAlign: 'center'}}>MyApp</Text>
+      </View>
+      <View style = {styles.form}>
+        <Text style= {styles.btn}> {formToggle ? 'No Account?' : 'Already Registered'} </Text>
+
+      <Button
+      title ={formToggle ? 'Register' : 'Login'}
+      onPress={()=> {
+        setFormToggle(!formToggle)
+          }}
+      />
+         {formToggle ? (
+
+        <Card>
+          <Card.Title h5>Login</Card.Title>
+        <Card.Divider />
       <LoginForm navigation={navigation} />
-      <Text style={styles.frontText}>Register</Text>
+      </Card>
+         ) : (
+      <Card>
+      <Card.Title h5>Register</Card.Title>
+      <Card.Divider />
       <RegisterForm navigation={navigation} />
+      </Card>
+         )}
+
     </View>
+    </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#7FFFD4',
-    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+  appTitle:{
+    flex: 1,
     justifyContent: 'center',
+    alignItems:'center',
+
   },
 
-  frontText: {
-    fontSize: 20,
-    color:'red',
-    fontWeight: 'bold',
-    fontFamily: 'Roboto'
+  form: {
+    flex: 4,
+  },
 
+  text:{
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight:'bold',
+    fontFamily: 'monospace'
+
+  },
+  btn:{
+    alignSelf: 'center',
+    padding: 20,
   }
+
 });
+
 
 Login.propTypes = {
   navigation: PropTypes.object,

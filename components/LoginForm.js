@@ -1,5 +1,6 @@
-import React, {useContext} from 'react';
-import {View, Button, StyleSheet} from 'react-native';
+import React, {useContext, useState} from 'react';
+import {Alert, View,} from 'react-native';
+import {Button} from 'react-native-elements';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -7,24 +8,31 @@ import {useLogin} from '../hooks/ApiHooks';
 import FormTextInput from './FormTextInput';
 import useLoginForm from '../hooks/LoginHooks';
 
+
 const LoginForm = ({navigation}) => {
+  const [loading, setLoading] =useState(false);
   const {inputs, handleInputChange} = useLoginForm();
   const {postLogin} = useLogin();
-  const {setIsLoggedIn} = useContext(MainContext);
+  const {setUser , setIsLoggedIn} = useContext(MainContext);
 
   const doLogin = async () => {
+    setLoading(true);
     try {
       const userData = await postLogin(inputs);
+      setUser(userData.user)
       setIsLoggedIn(true);
       await AsyncStorage.setItem('userToken', userData.token);
+      setLoading(false);
     } catch (error) {
-      console.error('postLogin error', error);
-      // TODO: add user notification about login error
+      setLoading(false);
+      console.error('postLogin error', error.message);
+      Alert.alert('Invalid username or password');
+
     }
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       <FormTextInput
         autoCapitalize="none"
         placeholder="username"
@@ -36,23 +44,11 @@ const LoginForm = ({navigation}) => {
         onChangeText={(txt) => handleInputChange('password', txt)}
         secureTextEntry={true}
       />
-      <Button title="Login" onPress={doLogin} />
+      <Button title="SIGN IN!" onPress={doLogin} loading ={loading} />
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    margin: 2,
-    padding: 4,
-    backgroundColor: '#7FFFD4',
-    fontWeight:'bold',
-    backgroundColor: 'orange',
-    borderRadius: 10,
-    fontFamily: 'Roboto',
-    fontSize: 21,
-    width: '80%',
-    },
-});
+
 
 
 

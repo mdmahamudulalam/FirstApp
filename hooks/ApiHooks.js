@@ -98,8 +98,28 @@ const useUser = () => {
       throw new Error(error.message);
     }
   };
+  const checkIsUserAvailable = async (username)=>{
+    try{
 
-  return {postRegister, checkToken};
+    const result = await doFetch(baseUrl + 'users/username/' + username);
+    return result.available;
+
+    } catch (error) {
+      throw new Error('apihooks userIsUserAvailable', error.message);
+    }
+  };
+
+  return {postRegister, checkToken, checkIsUserAvailable};
 };
-
-export {useLoadMedia, useLogin, useUser};
+const useTag =()=>{
+  const getFilesByTag = async (tag) => {
+    try{
+      const tagList = await doFetch(baseUrl + 'tags/' + tag);
+      return tagList;
+    }catch (error){
+      throw new Error(error.message);
+    }
+  };
+  return {getFilesByTag};
+};
+export {useLoadMedia, useLogin, useUser, useTag};

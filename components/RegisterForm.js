@@ -1,8 +1,8 @@
 import React from 'react';
-import {Alert, Button, StyleSheet, View} from 'react-native';
+import {Alert, Button, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {useLogin, useUser} from '../hooks/ApiHooks';
-import FormTextInput from './FormTextInput';
+import {Input} from 'react-native-elements';
 import useSignUpForm from '../hooks/RegisterHooks';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useContext} from 'react';
@@ -10,16 +10,26 @@ import {MainContext} from '../contexts/MainContext';
 
 const RegisterForm = ({navigation}) => {
   const {setIsLoggedIn, setUser} = useContext(MainContext);
-  const {inputs, handleInputChange} = useSignUpForm();
+  const {inputs,
+    handleInputChange,
+    handleInputEnd,
+    checkUserAvailable,
+    validateOnSend,
+    registerErrors} = useSignUpForm();
   const {postRegister} = useUser();
   const {postLogin} = useLogin();
 
   const doRegister = async () => {
+    if (!validateOnSend()){
+      Alert.alert('input validation failled')
+      return ;
+    }
+    delete inputs.confirmPassword;
     try {
       const result = await postRegister(inputs);
       console.log('doRegister ok', result.message);
       Alert.alert(result.message);
-      // do automatic login after registering
+
       const userData = await postLogin(inputs);
       await AsyncStorage.setItem('userToken', userData.token);
       setIsLoggedIn(true);
@@ -31,44 +41,59 @@ const RegisterForm = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
-      <FormTextInput
+    <View>
+      <Input
         autoCapitalize="none"
         placeholder="username"
         onChangeText={(txt) => handleInputChange('username', txt)}
-      />
-      <FormTextInput
+        onEndEditing ={(event)=>{
+          checkUserAvailable(event);
+          handleInputEnd('username', event.nativeEvent.text);
+        }}
+        errorMessage={registerErrors.username}
+
+        />
+      <Input
         autoCapitalize="none"
         placeholder="password"
         onChangeText={(txt) => handleInputChange('password', txt)}
+        onEndEditing ={(event)=>
+          handleInputEnd('password', event.nativeEvent.text)}
         secureTextEntry={true}
-      />
-      <FormTextInput
+        errorMessage={registerErrors.password}
+        />
+        <Input
+        autoCapitalize="none"
+        placeholder=" confirm password"
+        onChangeText={(txt) => handleInputChange('confirmPassword', txt)}
+        onEndEditing ={(event)=>
+          handleInputEnd('pconfirmPassword', event.nativeEvent.text)}
+        secureTextEntry={true}
+        errorMessage={registerErrors.confirmPassword}
+        />
+      <Input
         autoCapitalize="none"
         placeholder="email"
         onChangeText={(txt) => handleInputChange('email', txt)}
+        errorMessage={registerErrors.email}
+        onEndEditing ={(event)=>{
+          handleInputEnd('email', event.nativeEvent.text)
+        }}
+        errorMessage={registerErrors.email}
       />
-      <FormTextInput
+      <Input
         autoCapitalize="none"
         placeholder="full name"
         onChangeText={(txt) => handleInputChange('full_name', txt)}
+        onEndEditing ={(event)=>{
+          handleInputEnd('full_name', event.nativeEvent.text)
+        }}
+        errorMessage={registerErrors.full_name}
       />
       <Button title="Register!" onPress={doRegister} />
     </View>
   );
 };
-const styles = StyleSheet.create({
-  container: {
-    margin: 2,
-    padding: 4,
-    fontWeight:'bold',
-    backgroundColor: 'orange',
-    borderRadius: 10,
-    fontFamily: 'Roboto',
-    fontSize: 21,
-    width: '80%',
-    },
-});
 
 RegisterForm.propTypes = {
   navigation: PropTypes.object,

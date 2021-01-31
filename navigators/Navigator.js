@@ -10,13 +10,31 @@ import Profile from '../views/Profile';
 import Single from '../views/Single';
 import Login from '../views/Login';
 import {MainContext} from '../contexts/MainContext';
+import {Icon} from 'react-native-elements';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 const TabScreen = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+    screenOptions ={({route})=>({
+      tabBarIcon: (_focused, color, size)=>{
+        let iconName;
+        switch(route.name){
+           case 'Home':
+             iconName = 'home';
+             break;
+             case 'Profile':
+             iconName='account-box';
+             break;
+        }
+        return <Icon name={iconName}  size ={size} color ={color} />
+
+      }
+
+    })}
+    >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
@@ -26,10 +44,11 @@ const TabScreen = () => {
 const StackScreen = () => {
   const {isLoggedIn} = useContext(MainContext);
   return (
-    <Stack.Navigator>
+    <Stack.Navigator >
       {isLoggedIn ? (
         <>
           <Stack.Screen
+
             name="Home"
             component={TabScreen}
             options={({route}) => ({
@@ -40,7 +59,13 @@ const StackScreen = () => {
         </>
       ) : (
         <>
-          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen
+          name="Login"
+          component={Login}
+          options={() => ({
+            headerShown: false,
+          })}
+          />
         </>
       )}
     </Stack.Navigator>
