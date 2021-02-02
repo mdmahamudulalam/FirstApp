@@ -23,4 +23,3 @@ List.propTypes = {
 };
 
 export default List;
-

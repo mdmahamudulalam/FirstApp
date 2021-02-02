@@ -1,3 +1,5 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/display-name */
 import React, {useContext} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -18,22 +20,20 @@ const Stack = createStackNavigator();
 const TabScreen = () => {
   return (
     <Tab.Navigator
-    screenOptions ={({route})=>({
-      tabBarIcon: (_focused, color, size)=>{
-        let iconName;
-        switch(route.name){
-           case 'Home':
-             iconName = 'home';
-             break;
-             case 'Profile':
-             iconName='account-box';
-             break;
-        }
-        return <Icon name={iconName}  size ={size} color ={color} />
-
-      }
-
-    })}
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size}) => {
+          let iconName;
+          switch (route.name) {
+            case 'Home':
+              iconName = 'home';
+              break;
+            case 'Profile':
+              iconName = 'account-box';
+              break;
+          }
+          return <Icon name={iconName} size={size} color={color} />;
+        },
+      })}
     >
       <Tab.Screen name="Home" component={Home} />
       <Tab.Screen name="Profile" component={Profile} />
@@ -44,11 +44,10 @@ const TabScreen = () => {
 const StackScreen = () => {
   const {isLoggedIn} = useContext(MainContext);
   return (
-    <Stack.Navigator >
+    <Stack.Navigator>
       {isLoggedIn ? (
         <>
           <Stack.Screen
-
             name="Home"
             component={TabScreen}
             options={({route}) => ({
@@ -60,11 +59,11 @@ const StackScreen = () => {
       ) : (
         <>
           <Stack.Screen
-          name="Login"
-          component={Login}
-          options={() => ({
-            headerShown: false,
-          })}
+            name="Login"
+            component={Login}
+            options={() => ({
+              headerShown: false,
+            })}
           />
         </>
       )}

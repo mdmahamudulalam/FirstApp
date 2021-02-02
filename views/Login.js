@@ -1,15 +1,23 @@
 import React, {useContext, useEffect, useState} from 'react';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  View,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
-import {Button, Card, Text} from 'react-native-elements';
+import {Card, ListItem, Text} from 'react-native-elements';
+import {ScrollView} from 'react-native-gesture-handler';
 
 const Login = ({navigation}) => {
-  const {isLoggedIn, setIsLoggedIn, setUser} = useContext(MainContext);
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
   const [formToggle, setFormToggle] = useState(true);
   const {checkToken} = useUser();
 
@@ -32,74 +40,71 @@ const Login = ({navigation}) => {
   }, []);
 
   return (
-    <ScrollView>
-    <KeyboardAvoidingView
-    style = {styles.container}
-    behavior={Platform.OS == 'ios' ? 'padding': 'height'}>
-
-    <View style = {styles.appTitle}>
-      <Text h3 style={{textAlign: 'center'}}>MyApp</Text>
-      </View>
-      <View style = {styles.form}>
-        <Text style= {styles.btn}> {formToggle ? 'No Account?' : 'Already Registered'} </Text>
-
-      <Button
-      title ={formToggle ? 'Register' : 'Login'}
-      onPress={()=> {
-        setFormToggle(!formToggle)
-          }}
-      />
-         {formToggle ? (
-
-        <Card>
-          <Card.Title h5>Login</Card.Title>
-        <Card.Divider />
-      <LoginForm navigation={navigation} />
-      </Card>
-         ) : (
-      <Card>
-      <Card.Title h5>Register</Card.Title>
-      <Card.Divider />
-      <RegisterForm navigation={navigation} />
-      </Card>
-         )}
-
-    </View>
+    <KeyboardAvoidingView style={styles.container} behavior={'padding'} enabled>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.inner}>
+          <View style={styles.appTitle}>
+            <Text h4>MyApp</Text>
+          </View>
+          <View style={styles.form}>
+            <Card>
+              {formToggle ? (
+                <>
+                  <Card.Title h5>Login</Card.Title>
+                  <Card.Divider />
+                  <LoginForm navigation={navigation} />
+                </>
+              ) : (
+                <>
+                  <Card.Title h5>Register</Card.Title>
+                  <Card.Divider />
+                  <RegisterForm navigation={navigation} />
+                </>
+              )}
+              <ListItem
+                onPress={() => {
+                  setFormToggle(!formToggle);
+                }}
+              >
+                <ListItem.Content>
+                  <Text style={styles.text}>
+                    {formToggle
+                      ? 'No account? Register here.'
+                      : 'Already registered? Login here.'}
+                  </Text>
+                </ListItem.Content>
+                <ListItem.Chevron />
+              </ListItem>
+            </Card>
+          </View>
+        </View>
+      </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
-    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
-  appTitle:{
+  inner: {
+    padding: 12,
+    flex: 1,
+    justifyContent: 'space-around',
+  },
+  appTitle: {
     flex: 1,
     justifyContent: 'center',
-    alignItems:'center',
-
+    alignItems: 'center',
   },
-
   form: {
-    flex: 4,
+    flex: 6,
   },
-
-  text:{
-    textAlign: 'center',
-    fontSize: 20,
-    fontWeight:'bold',
-    fontFamily: 'monospace'
-
-  },
-  btn:{
+  text: {
     alignSelf: 'center',
     padding: 20,
-  }
-
+  },
 });
-
 
 Login.propTypes = {
   navigation: PropTypes.object,
