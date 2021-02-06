@@ -5,4 +5,3 @@ export default StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 25 : 0,
   },
 });
-
